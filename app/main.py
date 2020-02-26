@@ -11,4 +11,4 @@ app.add_middleware(CORSMiddleware,
                    allow_methods=['*'], allow_headers=['*']
                    )
 
-app.include_router(idiom_api.router, prefix=project.idiom_space, tags=[project.idiom_space])
+app.include_router(idiom_api.router, prefix=f"/{project.idiom_space}", tags=[project.idiom_space])

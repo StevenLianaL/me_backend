@@ -1,17 +1,22 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 
-from app.help.idiom_help import load_idioms, is_last_char_chinese
-from app.interface.idiom_inreface import Idiom
+from app.idiom.idiom_help import is_last_char_chinese, load_idioms
+from app.idiom.idiom_interface import Idiom
 from config import project
 
-router = APIRouter()
-name_space = project.idiom_space
+idiom_app = FastAPI(openapi_prefix=f"/{project.idiom_app_name}")
+
+idiom_app.add_middleware(CORSMiddleware,
+                         allow_origins=['*'], allow_credentials=True,
+                         allow_methods=['*'], allow_headers=['*']
+                         )
 
 
-@router.get('/s', response_model=List[Idiom])
+@idiom_app.get('/', response_model=List[Idiom])
 async def get_idioms(word: str):
     last_char = word[-1]
     if not is_last_char_chinese(last_char):

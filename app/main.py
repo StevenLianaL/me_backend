@@ -1,14 +1,8 @@
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
 
-from app.api import idiom_api
+from app.idiom.idiom_api import idiom_app
 from config import project
 
 app = FastAPI()
 
-app.add_middleware(CORSMiddleware,
-                   allow_origins=['*'], allow_credentials=True,
-                   allow_methods=['*'], allow_headers=['*']
-                   )
-
-app.include_router(idiom_api.router, prefix=f"/{project.idiom_space}", tags=[project.idiom_space])
+app.mount(f"/{project.idiom_app_name}", idiom_app)
